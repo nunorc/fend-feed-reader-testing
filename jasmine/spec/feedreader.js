@@ -110,24 +110,20 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
         beforeEach(function(done) {
-            loadFeed(0, function() {
-                done();
-            });
+            loadFeed(0, done);
         });
 
         it('has at least one entry', function(done) {
-            var feed = document.querySelector('.menu-icon-link');
-
             // feed as at least one entry
-            expect(feed.querySelector('.entry-link')).toBeDefined();
+            expect(document.querySelectorAll('.feed .entry-link').length).toBeGreaterThan(0);
             done();
         });
     });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
     describe('New Feed Selection', function() {
-        var feed = document.querySelector('.feed'),
-            contentLength = feed.textContent.length;
+        var feed0len = 0,
+            feed1len = 0;
 
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
@@ -135,7 +131,12 @@ $(function() {
          */
         beforeEach(function(done) {
             loadFeed(0, function() {
-                done();
+                feed0len = document.querySelector('.feed').textContent.length;
+
+                loadFeed(1, function() {
+                    feed1len = document.querySelector('.feed').textContent.length;
+                    done();
+                });
             });
         });
 
@@ -143,7 +144,7 @@ $(function() {
             /* we check that the content changed by comparing the length
              * of the text content before and after the change
              */
-            expect(feed.textContent.length).not.toBe(contentLength);
+            expect(feed0len).not.toBe(feed1len);
             done();
         });
     });
